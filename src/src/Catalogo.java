@@ -5,8 +5,9 @@ import java.util.Scanner;
 // funções e lista de mídias
 //adicionar tratamentos de erro
 public class Catalogo {
-    ArrayList<Midias> midias = new ArrayList<>();
     ArrayList<Usuario> usuarios = new ArrayList<>();
+    ArrayList<Midias> midias = new ArrayList<>();
+
     Scanner scanner = new Scanner(System.in);
     int login(){
         System.out.print("___BEM-VINDO___" +
@@ -24,7 +25,10 @@ public class Catalogo {
         String nomeUsuario = scanner.nextLine();
         System.out.print("Digite o e-mail do usuário: ");
         String emailUsuario = scanner.nextLine();
+        // usar tratamento de erro para email já existente
         // criar usuario
+        Usuario usuario = new Usuario(nomeUsuario, emailUsuario);
+        usuarios.add(usuario);
         System.out.println("Usúário cadastrado com sucesso!");
         //ir para o menu do usuario
     }
