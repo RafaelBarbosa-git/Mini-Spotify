@@ -9,5 +9,25 @@ public class Midias {
         this.artista = artista;
         this.duracao = this.duracao;
         this.genero = genero;
+    
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public String getArtista() {
+        return artista;
+    }
+
+    public double getDuracao() {
+        return duracao;
+    }
+
+    public Genero getGenero() {
+        return genero;
+    }
+
+    @Override
+    public String toString() {
+        return titulo + " - " + artista + " (" + duracao + " min, " + genero + ")";
     }
 }
