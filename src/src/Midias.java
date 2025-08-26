@@ -9,7 +9,7 @@ public class Midias {
         this.artista = artista;
         this.duracao = this.duracao;
         this.genero = genero;
-    
+    }
     public String getTitulo() {
         return titulo;
     }
@@ -18,7 +18,7 @@ public class Midias {
         return artista;
     }
 
-    public double getDuracao() {
+    public String getDuracao() {
         return duracao;
     }
 
