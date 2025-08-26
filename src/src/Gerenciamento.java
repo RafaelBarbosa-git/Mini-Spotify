@@ -1,8 +1,9 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class Gerenciamento {
-    Catalogo catalogo = new Catalogo();
+    Catalogo catalogo;
     HashMap<String, Usuario> usuarios = new HashMap<>();
 
     Scanner scanner = new Scanner(System.in);
@@ -18,13 +19,15 @@ public class Gerenciamento {
         return sairDoApp;
     }
     void criarUsuario(){
+        catalogo = new Catalogo();
+        ArrayList<Playlist> listadePlaylists = new ArrayList<>();
         System.out.print("Digite o nome do usuário: ");
         String nomeUsuario = scanner.nextLine();
         System.out.print("Digite o e-mail do usuário: ");
         String emailUsuario = scanner.nextLine();
         // usar tratamento de erro para email já existente
         // criar usuario
-        Usuario usuario = new Usuario(nomeUsuario, emailUsuario, catalogo);
+        Usuario usuario = new Usuario(nomeUsuario, emailUsuario, catalogo, listadePlaylists);
         usuarios.put(emailUsuario, usuario);
         System.out.println("Usúário cadastrado com sucesso!");
         //ir para o menu do usuario

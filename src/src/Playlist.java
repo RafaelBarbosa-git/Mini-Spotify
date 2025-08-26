@@ -7,7 +7,6 @@ public class Playlist {
     public Playlist(String nome, ArrayList midias) {
         this.nome = nome;
         this.lista = midias;
-
     }
 
     public String getNome() {
