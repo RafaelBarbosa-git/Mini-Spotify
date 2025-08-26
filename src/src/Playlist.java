@@ -20,4 +20,12 @@ public class Playlist {
     public ArrayList getListaDeMidias() {
         return listaDeMidias;
     }
+
+    @Override
+    public String toString() {
+        return "Playlist{" +
+                "nome='" + nome + '\'' +
+                ", listaDeMidias=" + listaDeMidias +
+                '}';
+    }
 }

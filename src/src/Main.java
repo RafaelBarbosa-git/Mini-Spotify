@@ -11,7 +11,7 @@ public class Main {
                 case 2:
                     gerenciameto.escolherUsuario();
                     int opcaoMenu = gerenciameto.menu();
-                    // switch case para o menu
+                    // switch case para todas as opções do menu
                     break;
                 case 3:
                 default:
