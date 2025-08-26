@@ -1,4 +1,4 @@
-
+public class Midias{
     private String titulo;
     private String artista;
     private String duracao;
@@ -30,3 +30,4 @@
     public String toString() {
         return titulo + " - " + artista + " (" + duracao + " min, " + genero + ")";
     }
+}
