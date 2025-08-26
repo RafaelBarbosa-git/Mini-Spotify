@@ -26,7 +26,6 @@ public class Gerenciamento {
         System.out.print("Digite o e-mail do usuário: ");
         String emailUsuario = scanner.nextLine();
         // usar tratamento de erro para email já existente
-        // criar usuario
         Usuario usuario = new Usuario(nomeUsuario, emailUsuario, catalogo, listadePlaylists);
         usuarios.put(emailUsuario, usuario);
         System.out.println("Usúário cadastrado com sucesso!");

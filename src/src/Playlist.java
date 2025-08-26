@@ -2,11 +2,11 @@ import java.util.ArrayList;
 
 public class Playlist {
     private String nome;
-    private ArrayList lista;
+    private ArrayList listaDeMidias;
 
     public Playlist(String nome, ArrayList midias) {
         this.nome = nome;
-        this.lista = midias;
+        this.listaDeMidias = midias;
     }
 
     public String getNome() {
@@ -15,5 +15,9 @@ public class Playlist {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public ArrayList getListaDeMidias() {
+        return listaDeMidias;
     }
 }
