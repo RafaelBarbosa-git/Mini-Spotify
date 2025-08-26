@@ -1,29 +1,31 @@
 import java.util.ArrayList;
 
-public class Usuario {
+public class Playlist {
     private String nome;
-    private String email;
-    private ArrayList<Playlist> playlists = new ArrayList<>();
+    private ArrayList<Midias> midias = new ArrayList<>();
 
-    public Usuario(String nome, String email) {
+    public Playlist(String nome) {
         this.nome = nome;
-        this.email = email;
     }
 
     public String getNome() { return nome; }
-    public String getEmail() { return email; }
 
-    public void adicionarPlaylist(Playlist playlist) {
-        playlists.add(playlist);
-    }
-
-    public ArrayList<Playlist> getPlaylists() {
-        return playlists;
+    public void adicionarMidia(Midias midia) {
+        midias.add(midia);
     }
 
     @Override
     public String toString() {
-        return "Usuário: " + nome + " (" + email + ")";
+        return "Playlist: " + nome + " | " + midias.size() + " mídias";
+    }
+
+    public void removerMidia(String tituloRemover) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removerMidia'");
+    }
+
+    public void exibirPlaylist() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'exibirPlaylist'");
     }
 }
-
