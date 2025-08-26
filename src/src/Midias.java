@@ -9,7 +9,7 @@
         this.artista = artista;
         this.duracao = this.duracao;
         this.genero = genero;
-    
+    }
     public String getTitulo() {
         return titulo;
     }
