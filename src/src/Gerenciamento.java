@@ -57,6 +57,9 @@ public class Gerenciamento {
             for (Usuario usuarioEscolhido : usuarios.values()){
                 if (usuarioEscolhido.getEmail().equals(emailEscolhido)){
                     System.out.println("Bem vindo(a) "+ usuarioEscolhido.getNome());
+
+                    this.catalogo = usuarioEscolhido.getCatalogo();
+
                 }
             }
         } else {
@@ -92,9 +95,47 @@ public class Gerenciamento {
         }
     }
     void adicionarMidia(){
-        //falta fazer
-        // cria uma midia e adiciona no catalogo
-        }
+            System.out.print("Digite o título da mídia: ");
+            String titulo = scanner.nextLine();
+
+            System.out.print("Digite o artista: ");
+            String artista = scanner.nextLine();
+
+            System.out.print("Digite a duração (em minutos): ");
+            String duracao = scanner.nextLine();
+
+            Genero genero = null;
+            while (genero == null) {
+                System.out.print("Digite o gênero (ex: ROCK, POP, JAZZ): ");
+                String generoStr = scanner.nextLine().toUpperCase();
+                try {
+                    genero = Genero.valueOf(generoStr);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Gênero inválido! Tente novamente.");
+                }
+            }
+
+            Classe classe = null;
+            while (classe == null) {
+                System.out.print("Digite a classe (ex: MUSICA, PODCAST): ");
+                String classeStr = scanner.nextLine().toUpperCase();
+                try {
+                    classe = Classe.valueOf(classeStr);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Classe inválida! Tente novamente.");
+                }
+            }
+
+            Midias novaMidia = new Midias(titulo, artista, duracao, genero, classe);
+            catalogo.adicionarMidias(novaMidia);
+
+            System.out.println("Mídia adicionada com sucesso: " + novaMidia.toString());
+
+        System.out.println("Pressione ENTER para continuar...");
+        scanner.nextLine();
+
+
+    }
     void escolherPlaylist(){
         //falta fazer
         // Será usado dentro do metodo "ver suas playlists"

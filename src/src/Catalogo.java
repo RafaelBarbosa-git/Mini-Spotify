@@ -28,5 +28,8 @@ public class Catalogo {
     public void removerPlaylist(Playlist playlist){
         todasPlaylists.remove(playlist);
     }
+
+    public void adicionarMidias(Midias novaMidia) {
+    }
 }
 

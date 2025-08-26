@@ -22,6 +22,10 @@ public class Usuario {
     public String toString() {
         return "Nome: " + nome + "   ;  email: " + email;
     }
+
+    public Catalogo getCatalogo() { return conta; }
+
+
 //      public void criarPlaylist(String nomePlaylist) {
 //        playlists.add(new Playlist(nomePlaylist));
 //    }

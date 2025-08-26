@@ -10,11 +10,27 @@ public class Main {
                     //deixar sem break para executar os 2 nesse caso
                 case 2:
                     gerenciameto.escolherUsuario();
-                    int opcaoMenu = gerenciameto.menu();
-                    // switch case para todas as opções do menu
+                    int opcaoMenu;
+                    do {
+                        opcaoMenu = gerenciameto.menu();
+                        switch (opcaoMenu) {
+                            case 1: gerenciameto.criarPlaylist(); break;
+                            case 2: gerenciameto.verPlaylists(); break;
+                            case 3: gerenciameto.adicionarMidia(); break;
+                            case 4: gerenciameto.verSuasMidias(); break;
+                            case 5: gerenciameto.pesquisarMidias(); break;
+                            case 6: System.out.println("Saindo da conta..."); break;
+                            default: System.out.println("Opção inválida!"); break;
+                        }
+                    } while(opcaoMenu != 6);
                     break;
+
                 case 3:
+                    System.out.println("Saindo do aplicativo...");
+                    break;
+
                 default:
+
                     System.out.println("Opção inválida! Digite apenas números inteiros de 1 a 3!");
             }
             }while (sairDoApp != 3);
