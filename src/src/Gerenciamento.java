@@ -40,7 +40,9 @@ public class Gerenciamento {
                 "\n3- Adicionar uma mídia" +
                 "\n4- Ver suas mídias" +
                 "\n5- Pesquisar mídias" +
-                "\n6- Sair da conta");
+                "\n6- Escolher uma mídia" +
+                "\n7- Sair da conta");
+
         int opcao = scanner.nextInt();
         scanner.nextLine();
         return opcao;
@@ -106,7 +108,7 @@ public class Gerenciamento {
 
             Genero genero = null;
             while (genero == null) {
-                System.out.print("Digite o gênero (ex: ROCK, POP, JAZZ): ");
+                System.out.print("Digite o gênero (ROCK, POP, MPB, JAZZ, CLASSICA, ELETRONICA, HIPHOP, RAP, SAMBA, PAGODE, FUNK, REGGAE): ");
                 String generoStr = scanner.nextLine().toUpperCase();
                 try {
                     genero = Genero.valueOf(generoStr);
@@ -117,7 +119,7 @@ public class Gerenciamento {
 
             Classe classe = null;
             while (classe == null) {
-                System.out.print("Digite a classe (ex: MUSICA, PODCAST): ");
+                System.out.print("Digite a classe (ex: AUDIOBOOK, MUSICA ou PODCAST): ");
                 String classeStr = scanner.nextLine().toUpperCase();
                 try {
                     classe = Classe.valueOf(classeStr);
@@ -148,16 +150,74 @@ public class Gerenciamento {
         //remove a midia de determinada playlist
     }
     void verSuasMidias(){
-        //falta fazer
-        // lista todas as midias
+        // falta fazer
     }
     void pesquisarMidias(){
-        //falta fazer
-        // pergunta se quer pesquisar por nome, por artista ou por gênero
+        System.out.println("Pesquisar por:");
+        System.out.println("1 - Nome da mídia");
+        System.out.println("2 - Artista");
+        System.out.println("3 - Gênero");
+        int opcao = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("Digite o termo da pesquisa: ");
+        String termo = scanner.nextLine().toLowerCase();
+
+        ArrayList<Midias> todasMidias = catalogo.getTodasMidias();
+        int contador = 0;
+
+        for (Midias midia : todasMidias) {
+            if (opcao == 1 && midia.getTitulo().toLowerCase().contains(termo)) {
+                System.out.println(midia);
+                contador++;
+            } else if (opcao == 2 && midia.getArtista().toLowerCase().contains(termo)) {
+                System.out.println(midia);
+                contador++;
+            } else if (opcao == 3 && midia.getGenero().toString().toLowerCase().contains(termo)) {
+                System.out.println(midia);
+                contador++;
+            }
+        }
+
+        if (contador == 0) {
+            System.out.println("Nenhuma mídia encontrada com esse termo.");
+        }
+
+        System.out.println("Pressione ENTER para continuar...");
+        scanner.nextLine();
     }
+
     void escolherMidia(){
-        //falta fazer
-        //permitirá escolher uma midia e mostrar todos os dados de tal midia
-        //deixar para fazer só no final
+        ArrayList<Midias> listaDeMidias = catalogo.getTodasMidias();
+
+        if (listaDeMidias.isEmpty()) {
+            System.out.println("Você ainda não tem mídias adicionadas!");
+            return;
+        }
+
+        System.out.println("Suas mídias:");
+        for (int i = 0; i < listaDeMidias.size(); i++) {
+            System.out.println((i + 1) + " - " + listaDeMidias.get(i).getTitulo());
+        }
+
+        System.out.print("Digite o número da mídia que deseja ver: ");
+        int escolha = scanner.nextInt();
+        scanner.nextLine(); // consumir quebra de linha
+
+        if (escolha > 0 && escolha <= listaDeMidias.size()) {
+            Midias midiaEscolhida = listaDeMidias.get(escolha - 1);
+            System.out.println("=== Detalhes da mídia ===");
+            System.out.println("Título: " + midiaEscolhida.getTitulo());
+            System.out.println("Artista: " + midiaEscolhida.getArtista());
+            System.out.println("Duração: " + midiaEscolhida.getDuracao() + " min");
+            System.out.println("Gênero: " + midiaEscolhida.getGenero());
+            System.out.println("Classe: " + midiaEscolhida.getClasse());
+        } else {
+            System.out.println("Opção inválida!");
+        }
+
+        System.out.println("Pressione ENTER para continuar...");
+        scanner.nextLine();
     }
-}
+    }
+

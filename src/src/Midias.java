@@ -32,4 +32,7 @@ public class Midias{
     public String toString() {
         return titulo + " - " + artista + " (" + duracao + " min, " + genero + ")";
     }
+    public Classe getClasse() {
+        return classe;
+    }
 }

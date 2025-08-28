@@ -19,7 +19,8 @@ public class Main {
                             case 3: gerenciameto.adicionarMidia(); break;
                             case 4: gerenciameto.verSuasMidias(); break;
                             case 5: gerenciameto.pesquisarMidias(); break;
-                            case 6: System.out.println("Saindo da conta..."); break;
+                            case 6: gerenciameto.escolherMidia(); break; //
+                            case 7: System.out.println("Saindo da conta..."); break;
                             default: System.out.println("Opção inválida!"); break;
                         }
                     } while(opcaoMenu != 6);

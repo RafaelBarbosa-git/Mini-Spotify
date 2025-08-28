@@ -16,9 +16,7 @@ public class Catalogo {
     public ArrayList getTodasPlaylists() {
         return todasPlaylists;
     }
-    public void adicionarMidia(Midias midia){
-        todasMidias.add(midia);
-    }
+
     public void adicionarPlaylist(Playlist playlist){
         todasPlaylists.add(playlist);
     }
@@ -30,6 +28,7 @@ public class Catalogo {
     }
 
     public void adicionarMidias(Midias novaMidia) {
+        todasMidias.add(novaMidia);
     }
 }
 
