@@ -1,3 +1,4 @@
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -108,7 +109,7 @@ public class Gerenciamento {
             String artista = scanner.nextLine();
 
             System.out.print("Digite a duração (em minutos): ");
-            String duracao = scanner.nextLine();
+//            Duration duracao = 90;
 
             Genero genero = null;
             while (genero == null) {
@@ -120,7 +121,7 @@ public class Gerenciamento {
                     System.out.println("Gênero inválido! Tente novamente.");
                 }
             }
-
+            //midias será abstrato. as classes serão "audioBook"; "música" e "podcast"
             Classe classe = null;
             while (classe == null) {
                 System.out.print("Digite a classe (ex: AUDIOBOOK, MUSICA ou PODCAST): ");
@@ -132,7 +133,7 @@ public class Gerenciamento {
                 }
             }
 
-            Midias novaMidia = new Midias(titulo, artista, duracao, genero, classe);
+            Midias novaMidia = new Midias(titulo, artista, duracao, genero);
             catalogo.adicionarMidias(novaMidia);
 
             System.out.println("Mídia adicionada com sucesso: " + novaMidia.toString());

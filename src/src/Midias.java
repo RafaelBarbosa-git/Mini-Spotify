@@ -1,16 +1,16 @@
+import java.time.Duration;
+
 public class Midias{
     private String titulo;
     private String artista;
-    private String duracao;
+    private Duration duracao;
     private Genero genero;
-    private Classe classe;
 
-    public Midias(String titulo, String artista, String duracao, Genero genero, Classe classe) {
+    public Midias(String titulo, String artista, Duration duracao, Genero genero) {
         this.titulo = titulo;
         this.artista = artista;
         this.duracao = duracao;
         this.genero = genero;
-        this.classe = classe;
     }
     public String getTitulo() {
         return titulo;
@@ -31,8 +31,5 @@ public class Midias{
     @Override
     public String toString() {
         return titulo + " - " + artista + " (" + duracao + " min, " + genero + ")";
-    }
-    public Classe getClasse() {
-        return classe;
     }
 }
