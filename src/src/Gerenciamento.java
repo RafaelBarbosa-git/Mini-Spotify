@@ -7,6 +7,8 @@ public class Gerenciamento {
     HashMap<String, Usuario> usuarios = new HashMap<>();
 
     Scanner scanner = new Scanner(System.in);
+    private Object playlist;
+
     int login(){
         System.out.print("___BEM-VINDO___" +
                 "\nEntre em uma conta para ouvir seus sons!" +
@@ -139,18 +141,112 @@ public class Gerenciamento {
 
     }
     void escolherPlaylist(){
-        //falta fazer
-        // Será usado dentro do metodo "ver suas playlists"
-        //pede o nome da playlist. se tiver, diz a duração total da playlist, lista as midias dela e
-        // dá a opção de adicionar ou remover música da playlist
-        //notificar caso ainda não tenham playlist ou se não tiver playlist com o nome dado
+        {
+            ArrayList<Playlist> playlists = catalogo.getTodasPlaylists();
+            if (playlists.isEmpty()) {
+                System.out.println("Você ainda não tem playlists.");
+                return;
+            }
+
+            System.out.print("Digite o nome da playlist que deseja visualizar: ");
+            String nomePlaylist = scanner.nextLine();
+
+            Playlist encontrada = null;
+            for (Playlist p : playlists) {
+                if (p.getNome().equalsIgnoreCase(nomePlaylist)) {
+                    encontrada = p;
+                    break;
+                }
+            }
+
+            if (encontrada == null) {
+                System.out.println("Playlist não encontrada.");
+                return;
+            }
+
+            ArrayList<Midias> midias = encontrada.getListaDeMidias();
+            System.out.println("Playlist: " + encontrada.getNome());
+            System.out.println("Número de mídias: " + midias.size());
+
+            int duracaoTotal = 0;
+            if (midias.isEmpty()) {
+                System.out.println("A playlist está vazia.");
+            } else {
+                for (Midias m : midias) {
+                    System.out.println("- " + m.toString());
+                    try {
+                        duracaoTotal += Integer.parseInt(m.getDuracao());
+                    } catch (NumberFormatException e) {
+                        System.out.println("(Erro ao calcular duração de: " + m.getTitulo() + ")");
+                    }
+                }
+                System.out.println("Duração total: " + duracaoTotal + " minutos");
+            }
+
+            System.out.print("O que deseja fazer agora?\n1 - Adicionar mídia\n2 - Remover mídia\n3 - Voltar\nDigite: ");
+            int opcao = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (opcao) {
+                case 1:
+                    adicionarMidiaAPlaylist(encontrada);
+                    break;
+                case 2:
+                    removerMidiaDePlaylist(encontrada);
+                    break;
+                case 3:
+                    break;
+                default:
+                    System.out.println("Opção inválida.");
+            }
+        }
+
     }
-    void removerMidiaDePlaylist(){
-        //falta fazer
-        //remove a midia de determinada playlist
+
+    private void adicionarMidiaAPlaylist(Playlist encontrada) {
+    }
+
+    void removerMidiaDePlaylist(Playlist playlist){
+        {
+            ArrayList<Midias> midias = playlist.getListaDeMidias();
+            if (midias.isEmpty()) {
+                System.out.println("A playlist está vazia.");
+                return;
+            }
+
+            System.out.println("Mídias da playlist:");
+            for (int i = 0; i < midias.size(); i++) {
+                System.out.println((i + 1) + " - " + midias.get(i).getTitulo());
+            }
+
+            System.out.print("Digite o número da mídia que deseja remover: ");
+            int escolha = scanner.nextInt();
+            scanner.nextLine();
+
+            if (escolha > 0 && escolha <= midias.size()) {
+                Midias removida = midias.remove(escolha - 1);
+                System.out.println("Mídia removida: " + removida.getTitulo());
+            } else {
+                System.out.println("Opção inválida.");
+            }
+        }
+
     }
     void verSuasMidias(){
-        // falta fazer
+         {//verSuasMidias;;
+        ArrayList<Midias> midias = catalogo.getTodasMidias();
+            if (midias.isEmpty()) {
+                System.out.println("Você ainda não adicionou nenhuma mídia.");
+            } else {
+                System.out.println("=== Suas Mídias ===");
+                for (Midias midia : midias) {
+                    System.out.println(midia.toString());
+                }
+            }
+            System.out.println("Pressione ENTER para continuar...");
+            scanner.nextLine();
+        }
+
     }
     void pesquisarMidias(){
         System.out.println("Pesquisar por:");
