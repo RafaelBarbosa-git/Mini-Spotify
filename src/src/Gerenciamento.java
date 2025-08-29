@@ -42,38 +42,40 @@ public class Gerenciamento {
                 "\n3- Adicionar uma mídia" +
                 "\n4- Ver suas mídias" +
                 "\n5- Pesquisar mídias" +
-                "\n6- Escolher uma mídia" +
-                "\n7- Sair da conta");
+                "\n6- Sair da conta" +
+                "\nDigite sua opção: ");
 
         int opcao = scanner.nextInt();
         scanner.nextLine();
         return opcao;
     }
-    void escolherUsuario(){
-        if (!(usuarios.isEmpty())){
+    boolean escolherUsuario() {
+        boolean existeUsuario = false;
+        if (!(usuarios.isEmpty())) {
             System.out.println("Contas Disponiveis:");
-            for (Usuario conta : usuarios.values()){
+            for (Usuario conta : usuarios.values()) {
                 System.out.println(conta.toString());
             }
             System.out.print("Digite o email da conta que deseja: ");
             String emailEscolhido = scanner.nextLine();
             // falta tratamento de erro
-            for (Usuario usuarioEscolhido : usuarios.values()){
-                if (usuarioEscolhido.getEmail().equals(emailEscolhido)){
-                    System.out.println("Bem vindo(a) "+ usuarioEscolhido.getNome());
-
+            for (Usuario usuarioEscolhido : usuarios.values()) {
+                if (usuarioEscolhido.getEmail().equals(emailEscolhido)) {
+                    System.out.println("Bem vindo(a) " + usuarioEscolhido.getNome());
                     this.catalogo = usuarioEscolhido.getCatalogo();
-
                 }
             }
         } else {
             System.out.println("Ainda não há usuários registrados!");
+            existeUsuario = false;
         }
+        return existeUsuario;
     }
 
 
     // como garantir que essas funções usem o catalogo do usuario certo, no caso de troca de usuário?
     void criarPlaylist(){
+
         System.out.print("Digite o nome da playlist que deseja criar: ");
         String nomeDaPlaylist = scanner.nextLine();
         // tratamento de erro
@@ -232,22 +234,37 @@ public class Gerenciamento {
         }
 
     }
-    void verSuasMidias(){
-         {//verSuasMidias;;
+    void verSuasMidias(){//verSuasMidias;;
         ArrayList<Midias> midias = catalogo.getTodasMidias();
             if (midias.isEmpty()) {
                 System.out.println("Você ainda não adicionou nenhuma mídia.");
             } else {
                 System.out.println("=== Suas Mídias ===");
-                for (Midias midia : midias) {
-                    System.out.println(midia.toString());
+                for (int i = 0; i < midias.size(); i++) {
+                    System.out.println((i + 1) + "- " + midias.get(i).getTitulo());
+                int escolhendoMidia;
+                do{
+                System.out.println("Deseja escolher alguma midia?" +
+                        "\n1- Sim" +
+                        "\n2- Não" +
+                        "\nDigite sua opção");
+                escolhendoMidia = scanner.nextInt();
+                switch (escolhendoMidia){
+                    case 1:
+                        escolherMidia(midias);
+                        break;
+                    case 2:
+                        break;
+                    default:
+                        System.out.println("Opção inválida! Tente Novamente.");
                 }
+                }while (escolhendoMidia != 2);
             }
             System.out.println("Pressione ENTER para continuar...");
             scanner.nextLine();
         }
-
     }
+
     void pesquisarMidias(){
         System.out.println("Pesquisar por:");
         System.out.println("1 - Nome da mídia");
@@ -283,18 +300,12 @@ public class Gerenciamento {
         scanner.nextLine();
     }
 
-    void escolherMidia(){
-        ArrayList<Midias> listaDeMidias = catalogo.getTodasMidias();
+    void escolherMidia(ArrayList<Midias> listaDeMidias){
 
-        if (listaDeMidias.isEmpty()) {
-            System.out.println("Você ainda não tem mídias adicionadas!");
-            return;
-        }
-
-        System.out.println("Suas mídias:");
-        for (int i = 0; i < listaDeMidias.size(); i++) {
-            System.out.println((i + 1) + " - " + listaDeMidias.get(i).getTitulo());
-        }
+//        System.out.println("Suas mídias:");
+//        for (int i = 0; i < listaDeMidias.size(); i++) {
+//            System.out.println((i + 1) + " - " + listaDeMidias.get(i).getTitulo());
+//        }
 
         System.out.print("Digite o número da mídia que deseja ver: ");
         int escolha = scanner.nextInt();

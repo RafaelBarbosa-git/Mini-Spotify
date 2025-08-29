@@ -9,23 +9,37 @@ public class Main {
                     gerenciameto.criarUsuario();
                     //deixar sem break para executar os 2 nesse caso
                 case 2:
-                    gerenciameto.escolherUsuario();
-                    int opcaoMenu;
-                    do {
-                        opcaoMenu = gerenciameto.menu();
-                        switch (opcaoMenu) {
-                            case 1: gerenciameto.criarPlaylist(); break;
-                            case 2: gerenciameto.verPlaylists(); break;
-                            case 3: gerenciameto.adicionarMidia(); break;
-                            case 4: gerenciameto.verSuasMidias(); break;
-                            case 5: gerenciameto.pesquisarMidias(); break;
-                            case 6: gerenciameto.escolherMidia(); break; //
-                            case 7: System.out.println("Saindo da conta..."); break;
-                            default: System.out.println("Opção inválida!"); break;
-                        }
-                    } while(opcaoMenu != 6);
+                    boolean existeUsuario = gerenciameto.escolherUsuario();
+                    if (existeUsuario) {
+                        int opcaoMenu;
+                        do {
+                            opcaoMenu = gerenciameto.menu();
+                            switch (opcaoMenu) {
+                                case 1:
+                                    gerenciameto.criarPlaylist();
+                                    break;
+                                case 2:
+                                    gerenciameto.verPlaylists();
+                                    break;
+                                case 3:
+                                    gerenciameto.adicionarMidia();
+                                    break;
+                                case 4:
+                                    gerenciameto.verSuasMidias();
+                                    break;
+                                case 5:
+                                    gerenciameto.pesquisarMidias();
+                                    break;
+                                case 6:
+                                    System.out.println("Saindo da conta...");
+                                    break;
+                                default:
+                                    System.out.println("Opção inválida!");
+                                    break;
+                            }
+                        } while (opcaoMenu != 6);
+                    }
                     break;
-
                 case 3:
                     System.out.println("Saindo do aplicativo...");
                     break;
