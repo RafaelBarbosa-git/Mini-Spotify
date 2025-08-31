@@ -1,6 +1,6 @@
 import java.time.Duration;
 
-public class Midias{
+public abstract class Midias{
     private String titulo;
     private String artista;
     private Duration duracao;
@@ -20,7 +20,7 @@ public class Midias{
         return artista;
     }
 
-    public String getDuracao() {
+    public Duration getDuracao() {
         return duracao;
     }
 
