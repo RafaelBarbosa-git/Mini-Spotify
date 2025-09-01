@@ -9,7 +9,12 @@ public class Main {
                     gerenciameto.criarUsuario();
                     //deixar sem break para executar os 2 nesse caso
                 case 2:
-                    boolean existeUsuario = gerenciameto.escolherUsuario();
+                    boolean existeUsuario = false;
+                    try {
+                        existeUsuario = gerenciameto.escolherUsuario();
+                    }catch (EmailJaUsadoException e){
+                        System.out.println(e.getMessage());
+                    }
                     if (existeUsuario) {
                         int opcaoMenu;
                         do {
@@ -22,7 +27,11 @@ public class Main {
                                     gerenciameto.verPlaylists();
                                     break;
                                 case 3:
-                                    gerenciameto.adicionarMidia();
+                                    try {
+                                        gerenciameto.adicionarMidia();
+                                    }catch (CampoSemLetras exeption){
+                                        System.out.println(exeption.getMessage());
+                                    }
                                     break;
                                 case 4:
                                     gerenciameto.verSuasMidias();

@@ -50,8 +50,9 @@ public class Gerenciamento {
         scanner.nextLine();
         return opcao;
     }
-    boolean escolherUsuario() {
+    boolean escolherUsuario() throws EmailJaUsadoException{
         boolean existeUsuario = false;
+        Usuario usuario = null;
         if (!(usuarios.isEmpty())) {
             System.out.println("Contas Disponiveis:");
             for (Usuario conta : usuarios.values()) {
@@ -59,17 +60,20 @@ public class Gerenciamento {
             }
             System.out.print("Digite o email da conta que deseja: ");
             String emailEscolhido = scanner.nextLine();
-            // falta tratamento de erro
+            if (!emailEscolhido.contains("@")){
+                throw new EmailJaUsadoException("O email precisa ter '@'!");
+            }
             for (Usuario usuarioEscolhido : usuarios.values()) {
                 if (usuarioEscolhido.getEmail().equals(emailEscolhido)) {
                     System.out.println("Bem vindo(a) " + usuarioEscolhido.getNome());
-                    this.catalogo = usuarioEscolhido.getCatalogo();
+                    usuario = usuarioEscolhido;
                 }
             }
         } else {
             System.out.println("Ainda não há usuários registrados!");
             existeUsuario = false;
         }
+        System.out.println(usuario);
         return existeUsuario;
     }
 
@@ -101,15 +105,21 @@ public class Gerenciamento {
             //continuar código
         }
     }
-    void adicionarMidia(){
+    void adicionarMidia() throws CampoSemLetras{
             System.out.print("Digite o título da mídia: ");
             String titulo = scanner.nextLine();
 
             System.out.print("Digite o artista: ");
             String artista = scanner.nextLine();
+            if (artista.matches(".*[a-zA-Z].*")){
+                throw new CampoSemLetras("Nome inválido! Não contém letras.");
+            }
 
-            System.out.print("Digite a duração (em minutos): ");
-//            Duration duracao = 90;
+            System.out.print("Digite a duração (HH:MM:SS): ");
+            String entrada = scanner.nextLine();
+            if (!entrada.contains(":")){
+
+            }
 
             Genero genero = null;
             while (genero == null) {
@@ -122,7 +132,7 @@ public class Gerenciamento {
                 }
             }
             //midias será abstrato. as classes serão "audioBook"; "música" e "podcast"
-            Classe classe = null;
+
             while (classe == null) {
                 System.out.print("Digite a classe (ex: AUDIOBOOK, MUSICA ou PODCAST): ");
                 String classeStr = scanner.nextLine().toUpperCase();
@@ -133,7 +143,7 @@ public class Gerenciamento {
                 }
             }
 
-            Midias novaMidia = new Midias(titulo, artista, duracao, genero);
+            Musica novaMidia = new Musica(titulo, artista, duracao, genero);
             catalogo.adicionarMidias(novaMidia);
 
             System.out.println("Mídia adicionada com sucesso: " + novaMidia.toString());
