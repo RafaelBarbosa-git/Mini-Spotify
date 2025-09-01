@@ -105,54 +105,77 @@ public class Gerenciamento {
             //continuar código
         }
     }
-    void adicionarMidia() throws CampoSemLetras{
-            System.out.print("Digite o título da mídia: ");
-            String titulo = scanner.nextLine();
+    void adicionarMidia() throws CampoSemLetras {
 
-            System.out.print("Digite o artista: ");
-            String artista = scanner.nextLine();
-            if (artista.matches(".*[a-zA-Z].*")){
-                throw new CampoSemLetras("Nome inválido! Não contém letras.");
-            }
+        System.out.print("Digite o título da mídia: ");
+        String titulo = scanner.nextLine();
 
+
+        System.out.print("Digite o artista: ");
+        String artista = scanner.nextLine();
+        if (!artista.matches(".*[a-zA-Z].*")) {
+            throw new CampoSemLetras("Nome inválido! Não contém letras.");
+        }
+
+        String duracao = "";
+        while (true) {
             System.out.print("Digite a duração (HH:MM:SS): ");
-            String entrada = scanner.nextLine();
-            if (!entrada.contains(":")){
-
+            duracao = scanner.nextLine();
+            if (duracao.matches("\\d{2}:\\d{2}:\\d{2}")) {
+                break; // saiu do loop se estiver correto
+            } else {
+                System.out.println("Formato inválido! Use HH:MM:SS. Tente novamente.");
             }
+        }
 
-            Genero genero = null;
-            while (genero == null) {
-                System.out.print("Digite o gênero (ROCK, POP, MPB, JAZZ, CLASSICA, ELETRONICA, HIPHOP, RAP, SAMBA, PAGODE, FUNK, REGGAE): ");
-                String generoStr = scanner.nextLine().toUpperCase();
-                try {
-                    genero = Genero.valueOf(generoStr);
-                } catch (IllegalArgumentException e) {
-                    System.out.println("Gênero inválido! Tente novamente.");
-                }
+        Genero genero = null;
+        while (genero == null) {
+            System.out.print("Digite o gênero (ROCK, POP, MPB, JAZZ, CLASSICA, ELETRONICA, HIPHOP, RAP, SAMBA, PAGODE, FUNK, REGGAE): ");
+            String generoStr = scanner.nextLine().toUpperCase();
+            try {
+                genero = Genero.valueOf(generoStr);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Gênero inválido! Tente novamente.");
             }
-            //midias será abstrato. as classes serão "audioBook"; "música" e "podcast"
+        }
 
-            while (classe == null) {
-                System.out.print("Digite a classe (ex: AUDIOBOOK, MUSICA ou PODCAST): ");
-                String classeStr = scanner.nextLine().toUpperCase();
-                try {
-                    classe = Classe.valueOf(classeStr);
-                } catch (IllegalArgumentException e) {
-                    System.out.println("Classe inválida! Tente novamente.");
-                }
+        Midias novaMidia = null;
+        int tipo = 0;
+
+        while (tipo < 1 || tipo > 3) {
+            System.out.println("Escolha o tipo de mídia:");
+            System.out.println("1 - MUSICA");
+            System.out.println("2 - AUDIOBOOK");
+            System.out.println("3 - PODCAST");
+            System.out.print("Digite sua opção: ");
+            tipo = scanner.nextInt();
+            scanner.nextLine();
+
+            if (tipo < 1 || tipo > 3) {
+                System.out.println("Opção inválida! Digite 1, 2 ou 3.");
             }
+        }
 
-            Musica novaMidia = new Musica(titulo, artista, duracao, genero);
-            catalogo.adicionarMidias(novaMidia);
+        switch (tipo) {
+            case 1:
+                novaMidia = new Musica(titulo, artista, duracao, genero);
+                break;
+            case 2:
+                novaMidia = new AudioBook(titulo, artista, duracao, genero);
+                break;
+            case 3:
+                novaMidia = new Podcast(titulo, artista, duracao, genero);
+                break;
+        }
 
-            System.out.println("Mídia adicionada com sucesso: " + novaMidia.toString());
+
+        catalogo.adicionarMidias(novaMidia);
+        System.out.println("Mídia adicionada com sucesso: " + novaMidia.toString());
 
         System.out.println("Pressione ENTER para continuar...");
         scanner.nextLine();
-
-
     }
+
     void escolherPlaylist(){
         {
             ArrayList<Playlist> playlists = catalogo.getTodasPlaylists();
