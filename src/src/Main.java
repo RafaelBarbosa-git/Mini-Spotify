@@ -21,7 +21,11 @@ public class Main {
                             opcaoMenu = gerenciameto.menu();
                             switch (opcaoMenu) {
                                 case 1:
-                                    gerenciameto.criarPlaylist();
+                                    try {
+                                        gerenciameto.criarPlaylist();
+                                    }catch (NomeDePlaylistJaUsadoException e){
+                                        System.out.println(e.getMessage());
+                                    }
                                     break;
                                 case 2:
                                     gerenciameto.verPlaylists();
@@ -29,7 +33,7 @@ public class Main {
                                 case 3:
                                     try {
                                         gerenciameto.adicionarMidia();
-                                    }catch (CampoSemLetras exeption){
+                                    }catch (CampoSemLetrasException exeption){
                                         System.out.println(exeption.getMessage());
                                     }
                                     break;

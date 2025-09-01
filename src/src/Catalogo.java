@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class Catalogo {
-    private ArrayList todasMidias;
+    private ArrayList<Midias> todasMidias;
     private ArrayList todasPlaylists;
 
     public Catalogo(ArrayList midias, ArrayList playlists) {
@@ -9,11 +9,11 @@ public class Catalogo {
         this.todasPlaylists = playlists;
     }
 
-    public ArrayList getTodasMidias() {
+    public ArrayList<Midias> getTodasMidias() {
         return todasMidias;
     }
 
-    public ArrayList getTodasPlaylists() {
+    public ArrayList<Playlist> getTodasPlaylists() {
         return todasPlaylists;
     }
 
@@ -29,6 +29,14 @@ public class Catalogo {
 
     public void adicionarMidias(Midias novaMidia) {
         todasMidias.add(novaMidia);
+    }
+    public void listarMidias(){
+        for (Midias midias : this.todasMidias){
+            System.out.println("=== Suas Mídias ===");
+            for (int i = 0; i < todasMidias.size(); i++) {
+                System.out.println((i + 1) + "- " + todasMidias.get(i).getTitulo());
+            }
+        }
     }
 }
 

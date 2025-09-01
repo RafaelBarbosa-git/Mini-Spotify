@@ -79,17 +79,20 @@ public class Gerenciamento {
 
 
     // como garantir que essas funções usem o catalogo do usuario certo, no caso de troca de usuário?
-    void criarPlaylist(){
-
+    void criarPlaylist() throws NomeDePlaylistJaUsadoException {
         System.out.print("Digite o nome da playlist que deseja criar: ");
         String nomeDaPlaylist = scanner.nextLine();
-        // tratamento de erro
+        for (Playlist playlist : catalogo.getTodasPlaylists()){
+            if (playlist.getNome().equalsIgnoreCase(nomeDaPlaylist)){
+                throw new NomeDePlaylistJaUsadoException("Este nome de playlist já esta sendo usado!");
+            }
+        }
         ArrayList<Midias> playlistNova = new ArrayList<>();
         Playlist playlistCriada = new Playlist(nomeDaPlaylist, playlistNova);
         catalogo.adicionarPlaylist(playlistCriada);
         System.out.println("Playlist criada com sucesso!");
     }
-    void verPlaylists(){
+    void verPlaylists() {
         ArrayList<Playlist> listaDePlaylist = catalogo.getTodasPlaylists();
         if (listaDePlaylist.isEmpty()){
             System.out.println("A lista ainda está vazia!");
@@ -97,15 +100,30 @@ public class Gerenciamento {
             for (Playlist playlistListada : listaDePlaylist) {
                 System.out.println("- " + playlistListada.getNome());
             }
-            //adicionar loop do-while a seguir
-            System.out.print("O que deseja?" +
-                    "\n1- Escolher playlist" +
-                    "\n2- remover playlist" +
-                    "\n3- voltar");
-            //continuar código
+            int opcaoEsReVo = 0;
+            do {
+                try {
+                    System.out.print("O que deseja?" +
+                            "\n1- Escolher playlist" +
+                            "\n2- remover playlist" +
+                            "\n3- voltar" +
+                            "\nDigite o que deseja: ");
+                    opcaoEsReVo = scanner.nextInt();
+                }catch (NumberFormatException e){
+                    System.out.println("Opção inválida! Digite apenas números inteiros de 1 a 3!");
+                }
+                switch (opcaoEsReVo){
+                    case 1:
+                        escolherPlaylist();
+                    case 2:
+                        removerPlaylist();
+                    case 3:
+                        System.out.println("Opção inválida! Digite apenas números inteiros de 1 a 3!");
+                }
+            }while (opcaoEsReVo != 3);
         }
     }
-    void adicionarMidia() throws CampoSemLetras {
+    void adicionarMidia() throws CampoSemLetrasException {
 
         System.out.print("Digite o título da mídia: ");
         String titulo = scanner.nextLine();
@@ -114,7 +132,7 @@ public class Gerenciamento {
         System.out.print("Digite o artista: ");
         String artista = scanner.nextLine();
         if (!artista.matches(".*[a-zA-Z].*")) {
-            throw new CampoSemLetras("Nome inválido! Não contém letras.");
+            throw new CampoSemLetrasException("Nome inválido! Não contém letras.");
         }
 
         String duracao = "";
@@ -143,14 +161,17 @@ public class Gerenciamento {
         int tipo = 0;
 
         while (tipo < 1 || tipo > 3) {
-            System.out.println("Escolha o tipo de mídia:");
-            System.out.println("1 - MUSICA");
-            System.out.println("2 - AUDIOBOOK");
-            System.out.println("3 - PODCAST");
-            System.out.print("Digite sua opção: ");
-            tipo = scanner.nextInt();
-            scanner.nextLine();
-
+            try {
+                System.out.println("Escolha o tipo de mídia:");
+                System.out.println("1 - MUSICA");
+                System.out.println("2 - AUDIOBOOK");
+                System.out.println("3 - PODCAST");
+                System.out.print("Digite sua opção: ");
+                tipo = scanner.nextInt();
+                scanner.nextLine();
+            }catch (NumberFormatException e){
+                System.out.println("Opção inválida! Digite apenas números.");
+            }
             if (tipo < 1 || tipo > 3) {
                 System.out.println("Opção inválida! Digite 1, 2 ou 3.");
             }
@@ -177,66 +198,53 @@ public class Gerenciamento {
     }
 
     void escolherPlaylist(){
-        {
-            ArrayList<Playlist> playlists = catalogo.getTodasPlaylists();
-            if (playlists.isEmpty()) {
-                System.out.println("Você ainda não tem playlists.");
-                return;
-            }
-
+        ArrayList<Playlist> playlists = catalogo.getTodasPlaylists();
             System.out.print("Digite o nome da playlist que deseja visualizar: ");
             String nomePlaylist = scanner.nextLine();
 
-            Playlist encontrada = null;
+            Playlist playlistEncontrada = null;
             for (Playlist p : playlists) {
                 if (p.getNome().equalsIgnoreCase(nomePlaylist)) {
-                    encontrada = p;
+                    playlistEncontrada = p;
                     break;
                 }
             }
-
-            if (encontrada == null) {
+            if (playlistEncontrada == null) {
                 System.out.println("Playlist não encontrada.");
                 return;
             }
+            else {
+                System.out.println("Playlist: " + playlistEncontrada.getNome());
+                playlistEncontrada.quantidadeDeMidias();
 
-            ArrayList<Midias> midias = encontrada.getListaDeMidias();
-            System.out.println("Playlist: " + encontrada.getNome());
-            System.out.println("Número de mídias: " + midias.size());
-
-            int duracaoTotal = 0;
-            if (midias.isEmpty()) {
-                System.out.println("A playlist está vazia.");
-            } else {
-                for (Midias m : midias) {
-                    System.out.println("- " + m.toString());
-                    try {
-                        duracaoTotal += Integer.parseInt(m.getDuracao());
-                    } catch (NumberFormatException e) {
-                        System.out.println("(Erro ao calcular duração de: " + m.getTitulo() + ")");
+                Duration duracaoTotal;
+                if (playlistEncontrada.getListaDeMidias().isEmpty()) {
+                    System.out.println("A playlist está vazia.");
+                } else {
+                    System.out.println("Duração total da playlist: " + playlistEncontrada.duracaoTotal());
+                    playlistEncontrada.listarMidias();
                     }
                 }
-                System.out.println("Duração total: " + duracaoTotal + " minutos");
-            }
 
-            System.out.print("O que deseja fazer agora?\n1 - Adicionar mídia\n2 - Remover mídia\n3 - Voltar\nDigite: ");
-            int opcao = scanner.nextInt();
-            scanner.nextLine();
+                System.out.print("\nO que deseja fazer agora?\n1 - Adicionar mídia à playlist\n2 - Remover mídia da playlist\n3 - Voltar\nDigite: ");
+                int opcao = scanner.nextInt();
+                scanner.nextLine();
 
-            switch (opcao) {
-                case 1:
-                    adicionarMidiaAPlaylist(encontrada);
-                    break;
-                case 2:
-                    removerMidiaDePlaylist(encontrada);
-                    break;
-                case 3:
-                    break;
-                default:
-                    System.out.println("Opção inválida.");
-            }
-        }
-
+                switch (opcao) {
+                    case 1:
+                        adicionarMidiaAPlaylist(playlistEncontrada);
+                        break;
+                    case 2:
+                        removerMidiaDePlaylist(playlistEncontrada);
+                        break;
+                    case 3:
+                        break;
+                    default:
+                        System.out.println("Opção inválida.");
+                }
+    }
+    void removerPlaylist(){
+        //falta fazer
     }
 
     private void adicionarMidiaAPlaylist(Playlist encontrada) {
@@ -268,32 +276,34 @@ public class Gerenciamento {
         }
 
     }
-    void verSuasMidias(){//verSuasMidias;;
-        ArrayList<Midias> midias = catalogo.getTodasMidias();
-            if (midias.isEmpty()) {
+    void verSuasMidias(){
+            if (catalogo.getTodasMidias().isEmpty()) {
                 System.out.println("Você ainda não adicionou nenhuma mídia.");
             } else {
-                System.out.println("=== Suas Mídias ===");
-                for (int i = 0; i < midias.size(); i++) {
-                    System.out.println((i + 1) + "- " + midias.get(i).getTitulo());
-                int escolhendoMidia;
-                do{
-                System.out.println("Deseja escolher alguma midia?" +
-                        "\n1- Sim" +
-                        "\n2- Não" +
-                        "\nDigite sua opção");
-                escolhendoMidia = scanner.nextInt();
-                switch (escolhendoMidia){
-                    case 1:
-                        escolherMidia(midias);
-                        break;
-                    case 2:
-                        break;
-                    default:
-                        System.out.println("Opção inválida! Tente Novamente.");
-                }
-                }while (escolhendoMidia != 2);
-            }
+                int opcaoEsReVo = 0;
+                    do {
+                        try {
+                            catalogo.listarMidias();
+                            System.out.print("\nO que deseja?" +
+                                    "\n1- Escolher mídia" +
+                                    "\n2- remover mídia do catalógo" +
+                                    "\n3- voltar" +
+                                    "\nDigite o que deseja: ");
+                            opcaoEsReVo = scanner.nextInt();
+                        }catch (NumberFormatException e){
+                            System.out.println("Opção inválida! Digite apenas números inteiros de 1 a 3!");
+                        }
+                        switch (opcaoEsReVo){
+                            case 1:
+                                escolherPlaylist();
+                            case 2:
+                                System.out.print("Digite o número da midia que deseja remover: ");
+                                int midiaRemover = scanner.nextInt();
+                            case 3:
+                                System.out.println("Opção inválida! Digite apenas números inteiros de 1 a 3!");
+                        }
+                    }while (opcaoEsReVo != 3);
+
             System.out.println("Pressione ENTER para continuar...");
             scanner.nextLine();
         }
@@ -304,24 +314,25 @@ public class Gerenciamento {
         System.out.println("1 - Nome da mídia");
         System.out.println("2 - Artista");
         System.out.println("3 - Gênero");
+        System.out.print("Digite sua opção: ");
         int opcao = scanner.nextInt();
         scanner.nextLine();
 
         System.out.print("Digite o termo da pesquisa: ");
         String termo = scanner.nextLine().toLowerCase();
 
-        ArrayList<Midias> todasMidias = catalogo.getTodasMidias();
+//        ArrayList<Midias> todasMidias = catalogo.getTodasMidias();
         int contador = 0;
 
-        for (Midias midia : todasMidias) {
+        for (Midias midia : catalogo.getTodasMidias()) {
             if (opcao == 1 && midia.getTitulo().toLowerCase().contains(termo)) {
-                System.out.println(midia);
+                System.out.println(midia.toString());
                 contador++;
             } else if (opcao == 2 && midia.getArtista().toLowerCase().contains(termo)) {
-                System.out.println(midia);
+                System.out.println(midia.toString());
                 contador++;
             } else if (opcao == 3 && midia.getGenero().toString().toLowerCase().contains(termo)) {
-                System.out.println(midia);
+                System.out.println(midia.toString());
                 contador++;
             }
         }
@@ -352,7 +363,6 @@ public class Gerenciamento {
             System.out.println("Artista: " + midiaEscolhida.getArtista());
             System.out.println("Duração: " + midiaEscolhida.getDuracao() + " min");
             System.out.println("Gênero: " + midiaEscolhida.getGenero());
-            System.out.println("Classe: " + midiaEscolhida.getClasse());
         } else {
             System.out.println("Opção inválida!");
         }
