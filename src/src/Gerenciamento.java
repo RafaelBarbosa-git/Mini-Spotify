@@ -10,49 +10,60 @@ public class Gerenciamento {
     Scanner scanner = new Scanner(System.in);
     private Object playlist;
 
-    int login(){
-        System.out.print("___BEM-VINDO___" +
-                "\nEntre em uma conta para ouvir seus sons!" +
-                "\n1- Criar nova conta" +
-                "\n2- Entrar em uma conta já existente" +
-                "\n3- Sair do app" +
-                "\nDigite a opção correspondente: ");
-        int sairDoApp = scanner.nextInt();
-        scanner.nextLine();
+    int login() {
+        int sairDoApp = 0;
+        try {
+            System.out.print("___BEM-VINDO___" +
+                    "\nEntre em uma conta para ouvir seus sons!" +
+                    "\n1- Criar nova conta" +
+                    "\n2- Entrar em uma conta já existente" +
+                    "\n3- Sair do app" +
+                    "\nDigite a opção correspondente: ");
+            sairDoApp = scanner.nextInt();
+            scanner.nextLine();
+
+        } catch (NumberFormatException e) {
+            System.out.println("Erro: Digite apenas números!");
+        }
         return sairDoApp;
     }
-    void criarUsuario(){
+    void criarUsuario() throws EmailJaUsadoException{
         ArrayList<Midias> todasMidias = new ArrayList<>();
         ArrayList<Playlist> todasPlaylists = new ArrayList<>();
         catalogo = new Catalogo(todasMidias, todasPlaylists);
-        ArrayList<Playlist> listadePlaylists = new ArrayList<>();
         System.out.print("Digite o nome do usuário: ");
         String nomeUsuario = scanner.nextLine();
         System.out.print("Digite o e-mail do usuário: ");
         String emailUsuario = scanner.nextLine();
-        // usar tratamento de erro para email já existente
+        if (!emailUsuario.contains("@")){
+            throw new EmailJaUsadoException("O email precisa ter '@'!");
+        }
         Usuario usuario = new Usuario(nomeUsuario, emailUsuario, catalogo);
         usuarios.put(emailUsuario, usuario);
         System.out.println("Usúário cadastrado com sucesso!");
         //ir para o menu do usuario
     }
     int menu(){
-        System.out.print("O que deseja?" +
-                "\n1- Criar uma playlist" +
-                "\n2- Ver suas Playlists" +
-                "\n3- Adicionar uma mídia" +
-                "\n4- Ver suas mídias" +
-                "\n5- Pesquisar mídias" +
-                "\n6- Sair da conta" +
-                "\nDigite sua opção: ");
-
-        int opcao = scanner.nextInt();
-        scanner.nextLine();
+        int opcao = -1;
+        try {
+            System.out.print("O que deseja?" +
+                    "\n1- Criar uma playlist" +
+                    "\n2- Ver suas Playlists" +
+                    "\n3- Adicionar uma mídia" +
+                    "\n4- Ver suas mídias" +
+                    "\n5- Pesquisar mídias" +
+                    "\n6- Sair da conta" +
+                    "\nDigite sua opção: ");
+            opcao = scanner.nextInt();
+            scanner.nextLine();
+        }catch (NumberFormatException e){
+            System.out.println("Erro: Digite apenas números!");
+        }
         return opcao;
     }
-    boolean escolherUsuario() throws EmailJaUsadoException{
-        boolean existeUsuario = false;
+    boolean escolherUsuario(){
         Usuario usuario = null;
+        boolean existeUsuario = false;
         if (!(usuarios.isEmpty())) {
             System.out.println("Contas Disponiveis:");
             for (Usuario conta : usuarios.values()) {
@@ -60,20 +71,19 @@ public class Gerenciamento {
             }
             System.out.print("Digite o email da conta que deseja: ");
             String emailEscolhido = scanner.nextLine();
-            if (!emailEscolhido.contains("@")){
-                throw new EmailJaUsadoException("O email precisa ter '@'!");
-            }
             for (Usuario usuarioEscolhido : usuarios.values()) {
                 if (usuarioEscolhido.getEmail().equals(emailEscolhido)) {
                     System.out.println("Bem vindo(a) " + usuarioEscolhido.getNome());
                     usuario = usuarioEscolhido;
+                    existeUsuario = true;
                 }
+            }
+            if (!existeUsuario){
+                System.out.println("Email de usuário não existente!");
             }
         } else {
             System.out.println("Ainda não há usuários registrados!");
-            existeUsuario = false;
         }
-        System.out.println(usuario);
         return existeUsuario;
     }
 
@@ -135,16 +145,25 @@ public class Gerenciamento {
             throw new CampoSemLetrasException("Nome inválido! Não contém letras.");
         }
 
-        String duracao = "";
-        while (true) {
+        Duration duracao = null;
+        do {
             System.out.print("Digite a duração (HH:MM:SS): ");
-            duracao = scanner.nextLine();
-            if (duracao.matches("\\d{2}:\\d{2}:\\d{2}")) {
-                break; // saiu do loop se estiver correto
-            } else {
+            String entrada = scanner.nextLine();
+
+            if (!entrada.matches("\\d{2}:\\d{2}:\\d{2}")) {
                 System.out.println("Formato inválido! Use HH:MM:SS. Tente novamente.");
+            } else {
+                String[] partes = entrada.split(":");
+                int horas = Integer.parseInt(partes[0]);
+                int minutos = Integer.parseInt(partes[1]);
+                int segundos = Integer.parseInt(partes[2]);
+
+                duracao = Duration.ofHours(horas)
+                        .plusMinutes(minutos)
+                        .plusSeconds(segundos);
             }
-        }
+        } while (duracao == null);
+
 
         Genero genero = null;
         while (genero == null) {
@@ -244,7 +263,23 @@ public class Gerenciamento {
                 }
     }
     void removerPlaylist(){
-        //falta fazer
+        ArrayList<Playlist> playlists = catalogo.getTodasPlaylists();
+        System.out.print("Digite o nome da playlist que deseja remover: ");
+        String nomePlaylist = scanner.nextLine();
+
+        Playlist playlistEncontrada = null;
+        for (Playlist p : playlists) {
+            if (p.getNome().equalsIgnoreCase(nomePlaylist)) {
+                playlistEncontrada = p;
+                break;
+            }
+        }
+        if (playlistEncontrada == null) {
+            System.out.println("Playlist não encontrada.");
+        }
+        else {
+            catalogo.removerPlaylist(playlistEncontrada);
+        }
     }
 
     private void adicionarMidiaAPlaylist(Playlist encontrada) {
@@ -295,12 +330,28 @@ public class Gerenciamento {
                         }
                         switch (opcaoEsReVo){
                             case 1:
-                                escolherPlaylist();
+                                escolherMidia(catalogo.getTodasMidias());
+                                break;
                             case 2:
-                                System.out.print("Digite o número da midia que deseja remover: ");
-                                int midiaRemover = scanner.nextInt();
+                                try {
+                                    System.out.print("Digite o número da midia que deseja remover: ");
+                                    int midiaRemover = scanner.nextInt();
+                                    if (midiaRemover < catalogo.getTodasMidias().size() && midiaRemover >= 0){
+                                        midiaRemover -= 1;
+                                        catalogo.removerMidia(midiaRemover);
+                                    }
+                                    else{
+                                        System.out.println("Erro: Valor inexistente!");
+                                    }
+                                }catch (NumberFormatException e){
+                                    System.out.println("Erro: Digite apenas números!");
+                                }
+                                break;
                             case 3:
+                                break;
+                            default:
                                 System.out.println("Opção inválida! Digite apenas números inteiros de 1 a 3!");
+                                break;
                         }
                     }while (opcaoEsReVo != 3);
 
@@ -346,11 +397,6 @@ public class Gerenciamento {
     }
 
     void escolherMidia(ArrayList<Midias> listaDeMidias){
-
-//        System.out.println("Suas mídias:");
-//        for (int i = 0; i < listaDeMidias.size(); i++) {
-//            System.out.println((i + 1) + " - " + listaDeMidias.get(i).getTitulo());
-//        }
 
         System.out.print("Digite o número da mídia que deseja ver: ");
         int escolha = scanner.nextInt();

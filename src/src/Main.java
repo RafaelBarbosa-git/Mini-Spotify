@@ -6,15 +6,15 @@ public class Main {
         sairDoApp = gerenciameto.login();
             switch (sairDoApp) {
                 case 1:
-                    gerenciameto.criarUsuario();
-                    //deixar sem break para executar os 2 nesse caso
-                case 2:
-                    boolean existeUsuario = false;
                     try {
-                        existeUsuario = gerenciameto.escolherUsuario();
+                        gerenciameto.criarUsuario();
                     }catch (EmailJaUsadoException e){
                         System.out.println(e.getMessage());
                     }
+                    //deixar sem break para executar os 2 nesse caso
+                case 2:
+                    boolean existeUsuario = false;
+                    existeUsuario = gerenciameto.escolherUsuario();
                     if (existeUsuario) {
                         int opcaoMenu;
                         do {

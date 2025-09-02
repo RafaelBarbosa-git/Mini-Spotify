@@ -20,8 +20,8 @@ public class Catalogo {
     public void adicionarPlaylist(Playlist playlist){
         todasPlaylists.add(playlist);
     }
-    public void removerMidia(Midias midia){
-        todasMidias.remove(midia);
+    public void removerMidia(int indice){
+        todasMidias.remove(indice);
     }
     public void removerPlaylist(Playlist playlist){
         todasPlaylists.remove(playlist);
